@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Jesstw.Repository.Implementation;
+using Jesstw.Repository;
 
 namespace Jesstw
 {
@@ -23,6 +25,7 @@ namespace Jesstw
         {
 
             services.AddControllers();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Jesstw", Version = "v1" });
