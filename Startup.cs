@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Jesstw.Repository.Implementation;
 using Jesstw.Repository;
+using Jesstw.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Jesstw
 {
@@ -23,9 +25,15 @@ namespace Jesstw
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var tokenConfigurations = new TokenConfiguration();
 
+            new ConfigureFromConfigurationOptions<TokenConfiguration>(
+                    Configuration.GetSection("TokenConfiguration")).Configure(tokenConfigurations);
+
+            services.AddSingleton(tokenConfigurations);
             services.AddControllers();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITokenRepository, TokenRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Jesstw", Version = "v1" });
